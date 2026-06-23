@@ -4,17 +4,17 @@ from .models import Category, Tag, Post, Comment, Bookmark, Advertisement, PostV
 # Register your models here.
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'created_at')
+    list_display = ('id', 'name', 'slug', 'created_at')
     prepopulated_fields = {'slug': ('name',)}
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
+    list_display = ('id', 'name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'status', 'published_at', 'created_at', 'updated_at')
+    list_display = ('id', 'title', 'author', 'category', 'status', 'published_at', 'created_at', 'updated_at')
     list_filter = ('status', 'category', 'tags', 'author')
     search_fields = ('title', 'content')
     prepopulated_fields = {'slug': ('title',)}
@@ -23,7 +23,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'user', 'parent', 'content', 'created_at')
+    list_display = ('id', 'post', 'user', 'parent', 'content', 'created_at')
     list_filter = ('post', 'user')
     search_fields = ('content',)
     date_hierarchy = 'created_at'
@@ -31,7 +31,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post', 'created_at')
+    list_display = ('id', 'user', 'post', 'created_at')
     list_filter = ('user', 'post')
     date_hierarchy = 'created_at'
     ordering = ('created_at',)
@@ -40,7 +40,7 @@ class BookmarkAdmin(admin.ModelAdmin):
 
 @admin.register(PostView)
 class PostViewAdmin(admin.ModelAdmin):
-    list_display = ('post','viewed_at','ip_address')
+    list_display = ('id', 'post', 'viewed_at', 'ip_address')
     list_filter = ('post', 'viewed_at')
     date_hierarchy = 'viewed_at'
     ordering = ('viewed_at',)
@@ -48,6 +48,7 @@ class PostViewAdmin(admin.ModelAdmin):
 @admin.register(Advertisement)
 class AdvertisementAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'title',
         'banner_image',
         'target_url',
