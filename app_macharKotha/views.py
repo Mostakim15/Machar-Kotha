@@ -5,9 +5,4 @@ from .serializers import CategorySerializer, TagSerializer, PostSerializer, Comm
 
 
 # Create your views here.
-def home(request):
-    return render(request, 'app_macharKotha/home.html')
 
-class CategoryListCreateView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
