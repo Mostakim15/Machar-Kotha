@@ -1,20 +1,9 @@
-from django.urls import path
+from django.urls import path, include
+from accounts.views import UserLoginView, UserRegistrationView
 
-from accounts import views
-
-
+# from accounts import views
 app_name = 'accounts'
-
 urlpatterns = [
-    path("register/", views.RegisterView.as_view(), name="register"),
-    path(
-        "password/reset/",
-        views.PasswordResetRequestView.as_view(),
-        name="password-reset-request",
-    ),
-    path(
-        "password/reset/confirm/",
-        views.PasswordResetConfirmView.as_view(),
-        name="password-reset-confirm",
-    ),
-]
+   path('register/', UserRegistrationView.as_view(), name='register'),
+   path('login/', UserLoginView.as_view(), name='login'),
+   ]
