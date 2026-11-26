@@ -3,9 +3,10 @@ from typing import cast
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from accounts.serializers import UserLoginSerializer, UserRegistrationSerializer
+from accounts.serializers import UserChangePasswordSerializer, UserLoginSerializer, UserProfileSerializer, UserRegistrationSerializer
 from django.contrib.auth import authenticate
 from accounts.renderers import CustomJSONRenderer
+from rest_framework.permissions import IsAuthenticated
 
 
 #Generate token manually using rest_framework_simplejwt
@@ -47,3 +48,30 @@ class UserLoginView(APIView):
             else:
                 return Response({'message': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileview(APIView):
+    renderer_classes = [CustomJSONRenderer]
+    permission_classes = [IsAuthenticated]  # Allow any user to access this view
+    def get(self, request, format=None):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        user = request.user
+        print("current password:", user.password)
+        serializer = UserChangePasswordSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            data = cast(dict[str, str], serializer.validated_data)
+            current_password = data.get('old_password')
+            new_password = data.get('password')
+            new_password_confirm = data.get('password_confirm')
+            if not user.check_password(current_password):
+                return Response({'message': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)

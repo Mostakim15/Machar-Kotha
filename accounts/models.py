@@ -55,6 +55,7 @@ class MyUser(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
 
     object = MyUserManager()
+    objects = MyUserManager()  # This line is added to ensure that the custom user manager is used for the MyUser model.
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name", "tc"]
