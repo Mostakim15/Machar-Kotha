@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,6 +150,17 @@ REST_FRAMEWORK = {
 }
 AUTH_USER_MODEL = 'accounts.MyUser'
 #this line tells Django to use the custom user model defined in the accounts app instead of the default User model provided by Django. By setting AUTH_USER_MODEL to 'accounts.MyUser', you are instructing Django to use the MyUser model as the user model for authentication and user management throughout the project.
+
+#Email backend configuration
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_FROM = os.getenv('EMAIL_FROM')
+
+PASSWORD_RESET_TIMEOUT = 900 # 15 minutes in seconds{this is for password reset links}
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
